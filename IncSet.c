@@ -117,6 +117,10 @@ static bool search(const IncSet* this, Panel* panel, IncMode_GetPanelValue getPa
    return false;
 }
 
+static bool searchByPrcessState(const IncSet* this, Panel* panel, IncMode_GetProcessState getProcessState) {
+	
+}
+
 void IncSet_activate(IncSet* this, IncType type, Panel* panel) {
    this->active = &(this->modes[type]);
    panel->currentBar = this->active->bar;

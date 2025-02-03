@@ -56,6 +56,11 @@ static const char* MainPanel_getValue(Panel* this, int i) {
    return Row_sortKeyString(row);
 }
 
+static const ProcessState MainPanel_getProcessState(Panel* this, int i) {
+    Process* p = (Process*) Panel_get(this, i);
+    return p->state;
+}
+
 static HandlerResult MainPanel_eventHandler(Panel* super, int ch) {
    MainPanel* this = (MainPanel*) super;
    Machine* host = this->state->host;

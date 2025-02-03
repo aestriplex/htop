@@ -46,6 +46,8 @@ void IncSet_setFilter(IncSet* this, const char* filter);
 
 typedef const char* (*IncMode_GetPanelValue)(Panel*, int);
 
+typedef ProcessState (*IncMode_GetProcessState)(Panel*, int);
+
 void IncSet_reset(IncSet* this, IncType type);
 
 IncSet* IncSet_new(FunctionBar* bar);
