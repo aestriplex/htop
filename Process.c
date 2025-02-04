@@ -513,7 +513,7 @@ void Process_writeCommand(const Process* this, int attr, int baseAttr, RichStrin
    }
 }
 
-static inline char processStateChar(ProcessState state) {
+inline char processStateChar(ProcessState state) {
    switch (state) {
       case UNKNOWN: return '?';
       case RUNNABLE: return 'U';
