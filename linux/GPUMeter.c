@@ -12,6 +12,7 @@ in the source distribution for its full text.
 #include "CRT.h"
 #include "RichString.h"
 #include "linux/LinuxMachine.h"
+#include "XUtils.h"
 
 
 static size_t activeMeters;
@@ -37,50 +38,6 @@ static const int GPUMeter_attributes[] = {
    GPU_ENGINE_4,
    GPU_RESIDUE,
 };
-
-static int humanTimeUnit(char* buffer, size_t size, unsigned long long int value) {
-
-   if (value < 1000)
-      return xSnprintf(buffer, size, "%3lluns", value);
-
-   if (value < 10000)
-      return xSnprintf(buffer, size, "%1llu.%1lluus", value / 1000, (value % 1000) / 100);
-
-   value /= 1000;
-
-   if (value < 1000)
-      return xSnprintf(buffer, size, "%3lluus", value);
-
-   if (value < 10000)
-      return xSnprintf(buffer, size, "%1llu.%1llums", value / 1000, (value % 1000) / 100);
-
-   value /= 1000;
-
-   if (value < 1000)
-      return xSnprintf(buffer, size, "%3llums", value);
-
-   if (value < 10000)
-      return xSnprintf(buffer, size, "%1llu.%1llus", value / 1000, (value % 1000) / 100);
-
-   value /= 1000;
-
-   if (value < 600)
-      return xSnprintf(buffer, size, "%3llus", value);
-
-   value /= 60;
-
-   if (value < 600)
-      return xSnprintf(buffer, size, "%3llum", value);
-
-   value /= 60;
-
-   if (value < 96)
-      return xSnprintf(buffer, size, "%3lluh", value);
-
-   value /= 24;
-
-   return xSnprintf(buffer, size, "%3llud", value);
-}
 
 static void GPUMeter_updateValues(Meter* this) {
    const Machine* host = this->host;

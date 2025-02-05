@@ -357,6 +357,7 @@ darwin_platform_headers = \
 	darwin/Platform.h \
 	darwin/PlatformHelpers.h \
 	darwin/ProcessField.h \
+	darwin/GPUMeter.h \
 	generic/fdstat_sysctl.h \
 	generic/gettime.h \
 	generic/hostname.h \
@@ -372,6 +373,7 @@ darwin_platform_sources = \
 	darwin/DarwinMachine.c \
 	darwin/DarwinProcess.c \
 	darwin/DarwinProcessTable.c \
+	darwin/GPUMeter.c \
 	generic/fdstat_sysctl.c \
 	generic/gettime.c \
 	generic/hostname.c \

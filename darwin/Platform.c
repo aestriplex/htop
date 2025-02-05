@@ -50,6 +50,7 @@ in the source distribution for its full text.
 #include "UptimeMeter.h"
 #include "darwin/DarwinMachine.h"
 #include "darwin/PlatformHelpers.h"
+#include "darwin/GPUMeter.h"
 #include "generic/fdstat_sysctl.h"
 #include "zfs/ZfsArcMeter.h"
 #include "zfs/ZfsCompressedArcMeter.h"
@@ -145,6 +146,7 @@ const MeterClass* const Platform_meterTypes[] = {
    &NetworkIOMeter_class,
    &FileDescriptorMeter_class,
    &BlankMeter_class,
+   &GPUMeter_class,
    NULL
 };
 

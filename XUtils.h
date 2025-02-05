@@ -146,6 +146,8 @@ double sumPositiveValues(const double* array, size_t count);
    appear often, hence it uses a O(log(n)) time algorithm. */
 size_t countDigits(size_t n, size_t base);
 
+int humanTimeUnit(char* buffer, size_t size, unsigned long long int value);
+
 /* Returns the number of trailing zero bits */
 #if defined(HAVE_BUILTIN_CTZ)
 static inline unsigned int countTrailingZeros(unsigned int x) {
