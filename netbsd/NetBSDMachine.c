@@ -283,3 +283,17 @@ bool Machine_isCPUonline(const Machine* host, unsigned int id) {
    // TODO: Support detecting online / offline CPUs.
    return true;
 }
+
+double Machine_getGpuUsage(const Machine* super, double values[]) {
+   /* Not supported yet */
+   (void)super;
+   (void)values;
+   return -1;
+}
+
+void Machine_GPUMeterDisplay(const Object* cast, RichString* out, double totalUsage) {
+   /* Not supported yet */
+   (void)cast;
+   (void)out;
+   (void)totalUsage;
+}

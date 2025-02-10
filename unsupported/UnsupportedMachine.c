@@ -54,3 +54,15 @@ void Machine_scan(Machine* super) {
    super->usedSwap = 0;
    super->cachedSwap = 0;
 }
+
+double Machine_getGpuUsage(const Machine* super, double values[]) {
+   (void)super;
+   (void)values;
+   return -1;
+}
+
+void Machine_GPUMeterDisplay(const Object* cast, RichString* out, double totalUsage) {
+   (void)cast;
+   (void)out;
+   (void)totalUsage;
+}
