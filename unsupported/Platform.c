@@ -163,3 +163,10 @@ void Platform_getHostname(char* buffer, size_t size) {
 void Platform_getRelease(char** string) {
    *string = xStrdup(Platform_unsupported);
 }
+
+double Platform_getGpuUsage(Meter* meter) {
+   /* Not supported yet */
+   (void)meter;
+   
+   return -1;
+}

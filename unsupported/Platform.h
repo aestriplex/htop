@@ -67,6 +67,8 @@ void Platform_getHostname(char* buffer, size_t size);
 
 void Platform_getRelease(char** string);
 
+double Platform_getGpuUsage(Meter* meter);
+
 #define PLATFORM_LONG_OPTIONS
 
 static inline void Platform_longOptionsUsage(ATTR_UNUSED const char* name) { }

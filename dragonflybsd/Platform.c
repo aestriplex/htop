@@ -355,3 +355,10 @@ void Platform_getBattery(double* percent, ACPresence* isOnAC) {
    else
       *isOnAC = acline == 0 ? AC_ABSENT : AC_PRESENT;
 }
+
+double Platform_getGpuUsage(Meter* meter) {
+   /* Not supported yet */
+   (void)meter;
+   
+   return -1;
+}

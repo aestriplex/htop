@@ -63,11 +63,6 @@ typedef struct GPUEngineData_ {
    struct GPUEngineData_* next;
 } GPUEngineData;
 
-struct EngineData {
-   const char* key;
-   unsigned long long int timeDiff;
-};
-
 typedef struct LinuxMachine_ {
    Machine super;
 

@@ -926,3 +926,10 @@ void Platform_updateTables(Machine* host) {
    PCPDynamicScreen_appendTables(&pcp->screens, host);
    PCPDynamicColumns_setupWidths(&pcp->columns);
 }
+
+double Platform_getGpuUsage(Meter* meter) {
+   /* Not supported yet */
+   (void)meter;
+   
+   return -1;
+}

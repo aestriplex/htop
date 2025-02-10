@@ -42,9 +42,6 @@ in the source distribution for its full text.
 #define O_PATH         010000000 // declare for ancient glibc versions
 #endif
 
-static unsigned long long int prevResidueTime, curResidueTime;
-static unsigned long long int totalGPUTimeDiff;
-static struct EngineData GPUMeter_engineData[4];
 
 /* Similar to get_nprocs_conf(3) / _SC_NPROCESSORS_CONF
  * https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/getsysstats.c;hb=HEAD
@@ -823,109 +820,4 @@ bool Machine_isCPUonline(const Machine* super, unsigned int id) {
 
    assert(id < super->existingCPUs);
    return this->cpuData[id + 1].online;
-}
-
-static int humanTimeUnit(char* buffer, size_t size, unsigned long long int value) {
-
-   if (value < 1000)
-      return xSnprintf(buffer, size, "%3lluns", value);
-
-   if (value < 10000)
-      return xSnprintf(buffer, size, "%1llu.%1lluus", value / 1000, (value % 1000) / 100);
-
-   value /= 1000;
-
-   if (value < 1000)
-      return xSnprintf(buffer, size, "%3lluus", value);
-
-   if (value < 10000)
-      return xSnprintf(buffer, size, "%1llu.%1llums", value / 1000, (value % 1000) / 100);
-
-   value /= 1000;
-
-   if (value < 1000)
-      return xSnprintf(buffer, size, "%3llums", value);
-
-   if (value < 10000)
-      return xSnprintf(buffer, size, "%1llu.%1llus", value / 1000, (value % 1000) / 100);
-
-   value /= 1000;
-
-   if (value < 600)
-      return xSnprintf(buffer, size, "%3llus", value);
-
-   value /= 60;
-
-   if (value < 600)
-      return xSnprintf(buffer, size, "%3llum", value);
-
-   value /= 60;
-
-   if (value < 96)
-      return xSnprintf(buffer, size, "%3lluh", value);
-
-   value /= 24;
-
-   return xSnprintf(buffer, size, "%3llud", value);
-}
-
-double Machine_getGpuUsage(const Machine* super, double values[]) {
-   unsigned int i;
-   uint64_t monotonictimeDelta;
-   const LinuxMachine* this = (const LinuxMachine*) super;
-   GPUEngineData *gpuEngineData;
-
-   assert(ARRAYSIZE(GPUMeter_engineData) + 1 == ARRAYSIZE(GPUMeter_attributes));
-
-	totalGPUTimeDiff = saturatingSub(this->curGpuTime, this->prevGpuTime);
-   monotonictimeDelta = super->monotonicMs - super->prevMonotonicMs;
-
-   prevResidueTime = curResidueTime;
-   curResidueTime = this->curGpuTime;
-
-   for (gpuEngineData = this->gpuEngineData, i = 0; gpuEngineData && i < ARRAYSIZE(GPUMeter_engineData); gpuEngineData = gpuEngineData->next, i++) {
-      GPUMeter_engineData[i].key      = gpuEngineData->key;
-      GPUMeter_engineData[i].timeDiff = saturatingSub(gpuEngineData->curTime, gpuEngineData->prevTime);
-
-      curResidueTime = saturatingSub(curResidueTime, gpuEngineData->curTime);
-
-      values[i] = 100.0 * GPUMeter_engineData[i].timeDiff / (1000 * 1000) / monotonictimeDelta;
-   }
-
-   values[ARRAYSIZE(GPUMeter_engineData)] = 100.0 * saturatingSub(curResidueTime, prevResidueTime) / (1000 * 1000) / monotonictimeDelta;
-
-   return 100.0 * totalGPUTimeDiff / (1000 * 1000) / monotonictimeDelta;
-}
-
-void Machine_GPUMeterDisplay(const Object* cast, RichString* out, double totalUsage) {
-   char buffer[50];
-   int written;
-   const Meter* this = (const Meter*)cast;
-   unsigned int i;
-
-   RichString_writeAscii(out, CRT_colors[METER_TEXT], ":");
-   written = xSnprintf(buffer, sizeof(buffer), "%4.1f", totalUsage);
-   RichString_appendnAscii(out, CRT_colors[METER_VALUE], buffer, written);
-   RichString_appendnAscii(out, CRT_colors[METER_TEXT], "%(", 2);
-   written = humanTimeUnit(buffer, sizeof(buffer), totalGPUTimeDiff);
-   RichString_appendnAscii(out, CRT_colors[METER_VALUE], buffer, written);
-   RichString_appendnAscii(out, CRT_colors[METER_TEXT], ")", 1);
-
-   for (i = 0; i < ARRAYSIZE(GPUMeter_engineData); i++) {
-      if (!GPUMeter_engineData[i].key)
-         break;
-
-      RichString_appendnAscii(out, CRT_colors[METER_TEXT], " ", 1);
-      RichString_appendAscii(out, CRT_colors[METER_TEXT], GPUMeter_engineData[i].key);
-      RichString_appendnAscii(out, CRT_colors[METER_TEXT], ":", 1);
-      if (isNonnegative(this->values[i]))
-         written = xSnprintf(buffer, sizeof(buffer), "%4.1f", this->values[i]);
-      else
-         written = xSnprintf(buffer, sizeof(buffer), " N/A");
-      RichString_appendnAscii(out, CRT_colors[METER_VALUE], buffer, written);
-      RichString_appendnAscii(out, CRT_colors[METER_TEXT], "%(", 2);
-      written = humanTimeUnit(buffer, sizeof(buffer), GPUMeter_engineData[i].timeDiff);
-      RichString_appendnAscii(out, CRT_colors[METER_VALUE], buffer, written);
-      RichString_appendnAscii(out, CRT_colors[METER_TEXT], ")", 1);
-   }
 }

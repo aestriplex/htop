@@ -35,8 +35,6 @@ in the source distribution for its full text.
 typedef unsigned long long int memory_t;
 #define MEMORY_MAX ULLONG_MAX
 
-extern const int gpuMetricMaxItems;
-
 typedef struct Machine_ {
    struct Settings_* settings;
 
@@ -95,8 +93,6 @@ void Machine_setTablesPanel(Machine* this, Panel* panel);
 void Machine_scan(Machine* this);
 
 void Machine_scanTables(Machine* this);
-
-double Machine_getGpuUsage(const Machine* super, double values[]);
 
 void Machine_GPUMeterDisplay(const Object* cast, RichString* out, double totalUsage);
 

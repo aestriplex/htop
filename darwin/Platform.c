@@ -632,3 +632,10 @@ void Platform_gettime_monotonic(uint64_t* msec) {
 #endif
 
 }
+
+double Platform_getGpuUsage(Meter* meter) {
+   /* Not supported yet */
+   (void)meter;
+   
+   return -1;
+}

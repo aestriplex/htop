@@ -519,3 +519,10 @@ error:
    if (fd != -1)
       close(fd);
 }
+
+double Platform_getGpuUsage(Meter* meter) {
+   /* Not supported yet */
+   (void)meter;
+   
+   return -1;
+}

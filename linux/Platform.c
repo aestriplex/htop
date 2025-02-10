@@ -146,6 +146,7 @@ static enum { BAT_PROC, BAT_SYS, BAT_ERR } Platform_Battery_method = BAT_PROC;
 static time_t Platform_Battery_cacheTime;
 static double Platform_Battery_cachePercent = NAN;
 static ACPresence Platform_Battery_cacheIsOnAC;
+static unsigned long long int prevResidueTime, curResidueTime;
 
 #ifdef HAVE_LIBCAP
 static enum CapMode Platform_capabilitiesMode = CAP_MODE_BASIC;
@@ -1103,4 +1104,34 @@ void Platform_done(void) {
 #ifdef HAVE_SENSORS_SENSORS_H
    LibSensors_cleanup();
 #endif
+}
+
+
+double Platform_getGpuUsage(Meter* meter) {
+   unsigned int i;
+   uint64_t monotonictimeDelta;
+   const Machine* super = meter->host;
+   const LinuxMachine* this = (const LinuxMachine*) super;
+   GPUEngineData *gpuEngineData;
+
+   assert(ARRAYSIZE(GPUMeter_engineData) + 1 == ARRAYSIZE(GPUMeter_attributes));
+
+	totalGPUTimeDiff = saturatingSub(this->curGpuTime, this->prevGpuTime);
+   monotonictimeDelta = super->monotonicMs - super->prevMonotonicMs;
+
+   prevResidueTime = curResidueTime;
+   curResidueTime = this->curGpuTime;
+
+   for (gpuEngineData = this->gpuEngineData, i = 0; gpuEngineData && i < ARRAYSIZE(GPUMeter_engineData); gpuEngineData = gpuEngineData->next, i++) {
+      GPUMeter_engineData[i].key      = gpuEngineData->key;
+      GPUMeter_engineData[i].timeDiff = saturatingSub(gpuEngineData->curTime, gpuEngineData->prevTime);
+
+      curResidueTime = saturatingSub(curResidueTime, gpuEngineData->curTime);
+
+      meter->values[i] = 100.0 * GPUMeter_engineData[i].timeDiff / (1000 * 1000) / monotonictimeDelta;
+   }
+
+   meter->values[ARRAYSIZE(GPUMeter_engineData)] = 100.0 * saturatingSub(curResidueTime, prevResidueTime) / (1000 * 1000) / monotonictimeDelta;
+
+   return 100.0 * totalGPUTimeDiff / (1000 * 1000) / monotonictimeDelta;
 }

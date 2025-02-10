@@ -78,6 +78,8 @@ bool Platform_getNetworkIO(NetworkIOData* data);
 
 void Platform_getBattery(double* percent, ACPresence* isOnAC);
 
+double Platform_getGpuUsage(Meter* meter);
+
 static inline void Platform_getHostname(char* buffer, size_t size) {
    Generic_hostname(buffer, size);
 }

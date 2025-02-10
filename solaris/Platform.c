@@ -340,3 +340,10 @@ void Platform_getBattery(double* percent, ACPresence* isOnAC) {
    *percent = NAN;
    *isOnAC = AC_ERROR;
 }
+
+double Platform_getGpuUsage(Meter* meter) {
+   /* Not supported yet */
+   (void)meter;
+   
+   return -1;
+}

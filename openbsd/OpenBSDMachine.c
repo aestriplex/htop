@@ -289,13 +289,6 @@ bool Machine_isCPUonline(const Machine* super, unsigned int id) {
    return this->cpuData[id + 1].online;
 }
 
-double Machine_getGpuUsage(const Machine* super, double values[]) {
-   /* Not supported yet */
-   (void)super;
-   (void)values;
-   return -1;
-}
-
 void Machine_GPUMeterDisplay(const Object* cast, RichString* out, double totalUsage) {
    /* Not supported yet */
    (void)cast;

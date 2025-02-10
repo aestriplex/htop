@@ -169,4 +169,6 @@ void Platform_dynamicScreensDone(Hashtable* screens);
 
 void Platform_updateTables(Machine* host);
 
+double Platform_getGpuUsage(Meter* meter);
+
 #endif
