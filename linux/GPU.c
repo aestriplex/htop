@@ -72,6 +72,7 @@ static void update_machine_gpu(LinuxProcessTable* lpt, unsigned long long int ti
 
    (*engineData)->curTime += time;
    lhost->curGpuTime += time;
+   lhost->super.totalGPUTimeDiff = saturatingSub(lhost->curGpuTime, lhost->prevGpuTime);
 }
 
 /*

@@ -1106,23 +1106,21 @@ void Platform_done(void) {
 #endif
 }
 
-
 double Platform_getGpuUsage(Meter* meter) {
    unsigned int i;
    uint64_t monotonictimeDelta;
-   const Machine* super = meter->host;
-   const LinuxMachine* this = (const LinuxMachine*) super;
+   const Machine* host = meter->host;
+   const LinuxMachine* lhost = (const LinuxMachine*) host;
    GPUEngineData *gpuEngineData;
 
-   assert(ARRAYSIZE(GPUMeter_engineData) + 1 == ARRAYSIZE(GPUMeter_attributes));
+   assert(ARRAYSIZE(GPUMeter_engineData) + 1 == ARRAYSIZE(meter->attributes));
 
-	totalGPUTimeDiff = saturatingSub(this->curGpuTime, this->prevGpuTime);
-   monotonictimeDelta = super->monotonicMs - super->prevMonotonicMs;
+   monotonictimeDelta = host->monotonicMs - host->prevMonotonicMs;
 
    prevResidueTime = curResidueTime;
-   curResidueTime = this->curGpuTime;
+   curResidueTime = lhost->curGpuTime;
 
-   for (gpuEngineData = this->gpuEngineData, i = 0; gpuEngineData && i < ARRAYSIZE(GPUMeter_engineData); gpuEngineData = gpuEngineData->next, i++) {
+   for (gpuEngineData = lhost->gpuEngineData, i = 0; gpuEngineData && i < ARRAYSIZE(GPUMeter_engineData); gpuEngineData = gpuEngineData->next, i++) {
       GPUMeter_engineData[i].key      = gpuEngineData->key;
       GPUMeter_engineData[i].timeDiff = saturatingSub(gpuEngineData->curTime, gpuEngineData->prevTime);
 
@@ -1133,5 +1131,5 @@ double Platform_getGpuUsage(Meter* meter) {
 
    meter->values[ARRAYSIZE(GPUMeter_engineData)] = 100.0 * saturatingSub(curResidueTime, prevResidueTime) / (1000 * 1000) / monotonictimeDelta;
 
-   return 100.0 * totalGPUTimeDiff / (1000 * 1000) / monotonictimeDelta;
+   return 100.0 * host->totalGPUTimeDiff / (1000 * 1000) / monotonictimeDelta;
 }

@@ -350,9 +350,3 @@ bool Machine_isCPUonline(const Machine* host, unsigned int id) {
    return true;
 }
 
-void Machine_GPUMeterDisplay(const Object* cast, RichString* out, double totalUsage) {
-   /* Not supported yet */
-   (void)cast;
-   (void)out;
-   (void)totalUsage;
-}
