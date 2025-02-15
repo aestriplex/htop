@@ -13,6 +13,7 @@ in the source distribution for its full text.
 #include "FunctionBar.h"
 #include "Panel.h"
 #include "Vector.h"
+#include "Process.h"
 
 
 #define INCMODE_MAX 128
@@ -45,6 +46,8 @@ static inline const char* IncSet_filter(const IncSet* this) {
 void IncSet_setFilter(IncSet* this, const char* filter);
 
 typedef const char* (*IncMode_GetPanelValue)(Panel*, int);
+
+typedef ProcessState* (*IncMode_GetProcessState)(Panel*, int);
 
 void IncSet_reset(IncSet* this, IncType type);
 

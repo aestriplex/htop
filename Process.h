@@ -317,6 +317,8 @@ bool Process_rowIsVisible(const Row* super, const struct Table_* table);
 
 bool Process_rowMatchesFilter(const Row* super, const struct Table_* table);
 
+char processStateChar(ProcessState state);
+
 static inline int Process_pidEqualCompare(const void* v1, const void* v2) {
    return Row_idEqualCompare(v1, v2);
 }
